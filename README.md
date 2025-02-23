@@ -35,6 +35,13 @@ Then link to your target:
 target_link_libraries(YOUR_TARGET PRIVATE cnpy)
 ```
 
+In your code:
+```cpp
+#include <cnpy.h>
+```
+
+See [example](example/main.cpp) for more detail.
+
 # Description:
 
 There are two functions for writing data: `npy_save` and `npz_save`.

@@ -25,3 +25,6 @@ FetchContent_MakeAvailable(zlib)
 include_directories(${ZLIB_INCLUDE_DIRS})
 add_library(cnpy STATIC "./src/cnpy.cpp")
 target_link_libraries(cnpy zlibstatic)
+
+# add_executable(cnpy_example example/main.cpp)
+# target_link_libraries(cnpy_example PRIVATE cnpy)
