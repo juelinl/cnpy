@@ -1,4 +1,5 @@
 # Purpose:
+This branch aims to provide support for the cnpy library on Windows platform.
 
 NumPy offers the `save` method for easy saving of arrays into .npy and `savez` for zipping multiple .npy arrays together into a .npz file. 
 
@@ -11,24 +12,27 @@ The .npy file header takes care of specifying the size, shape, and data type of 
 
 Loading data written in numpy formats into C++ is equally simple, but requires you to type-cast the loaded data to the type of your choice.
 
-# Installation:
-
-Default installation directory is /usr/local. 
-To specify a different directory, add `-DCMAKE_INSTALL_PREFIX=/path/to/install/dir` to the cmake invocation in step 4.
-
-1. get [cmake](www.cmake.org)
-2. create a build directory, say $HOME/build
-3. cd $HOME/build
-4. cmake /path/to/cnpy
-5. make
-6. make install
-
 # Using:
 
-To use, `#include "cnpy.h"` in your source code. Compile the source code mycode.cpp as
+In CMakeLists.txt:
 
 ```bash
-g++ -o mycode mycode.cpp -L/path/to/install/dir -lcnpy -lz --std=c++11
+include(FetchContent)
+# Set the third-party directory where external libraries will be stored
+set(THIRD_PARTY_DIR ${CMAKE_SOURCE_DIR}/third_party)
+# Define the cnpy repository
+FetchContent_Declare(
+    cnpy
+    GIT_REPOSITORY https://github.com/juelinl/cnpy.git
+    SOURCE_DIR ${THIRD_PARTY_DIR}/cnpy
+    GIT_TAG windows
+)
+FetchContent_MakeAvailable(cnpy)
+```
+
+Then link to your target:
+```bash
+target_link_libraries(YOUR_TARGET PRIVATE cnpy)
 ```
 
 # Description:
@@ -50,17 +54,4 @@ struct NpyArray {
     size_t word_size;
     template<typename T> T* data();
 };
-```
-
-See [example1.cpp](example1.cpp) for examples of how to use the library. example1 will also be build during cmake installation.
-
-# cnpy with memmap
-cnpy_mmap is an additional feature in this project. It allows you to read `.npy` file using `memap` to reduce memory consumption.
-
-# Using:
-
-To use, `#include "cnpy_mmap.h"` in your source code. Compile the source code mycode.cpp as
-
-```bash
-g++ -o mycode mycode.cpp -L/path/to/install/dir -lcnpy_mmap
 ```
