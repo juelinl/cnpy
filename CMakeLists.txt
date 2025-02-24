@@ -23,8 +23,19 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(zlib)
 
 include_directories(${ZLIB_INCLUDE_DIRS})
-add_library(cnpy STATIC "./src/cnpy.cpp")
-target_link_libraries(cnpy zlibstatic)
+
+add_library(cnpy STATIC
+    src/cnpy.cpp
+    include/cnpy.h
+)
+
+target_include_directories(cnpy PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(cnpy PUBLIC zlibstatic)
+
 
 # add_executable(cnpy_example example/main.cpp)
 # target_link_libraries(cnpy_example PRIVATE cnpy)
